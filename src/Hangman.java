@@ -1,25 +1,34 @@
 /**
  * 
  */
+import java.util.ArrayList;
 import java.util.Scanner;
-import com.zubiri.hangman.Hangman;
-
+import com.zubiri.hangman.Words;
+import java.util.Scanner;
 /**
  * @author ik013043z1
  *
  */
-public class mainInterface {
+public class Hangman {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	
+		Scanner sc = new Scanner( System.in);
 		
 		// Save into an array all the surnames of the people in class
-		String[] surnames = {"lazkano","intxausti","artola","alberdi","lekubide","ortiz","gonzalez"};
+		ArrayList <String> surnames = new ArrayList();
+		surnames.add("lazkano");
+		surnames.add("intxausti");
+		surnames.add("artola");
+		surnames.add("alberdi");
+		surnames.add("lekubide");
+		surnames.add("ortiz");
+		surnames.add("gonzalez");
 
-		Hangman hangman = new Hangman(surnames);
+		Words hangman = new Words(surnames);
 		// Print the games' description
 		System.out.println("Welcome to the famous HANGMAN game.");
 		System.out.println("You will have to guess which surname of the people in class is hidden between the voids.");
@@ -27,38 +36,49 @@ public class mainInterface {
 		boolean playAgain=true;
 		while (playAgain == true) {
 			// Take randomly a surname between them
-			String randomSurname = surnames[new Random().nextInt(surnames.length)];
+			
+			String randomSurname = hangman.selectRandomWord() ;
 			// Ask the first letter to the player
 			System.out.println("Good luck, start with the first letter.");
 			// Create a char array with the length of the maximum quantity of letters the player can guess
 			char guessed[]=new char[3];
 			// Declare a variable that will hold the number of letter that the player guesses
+			
+			//String arraylsit bezala jarri contains metodoa erabili ahal izateko
+			
+			
 			int guessedCounter=0;
 			// Print the word with voids
-			for (int index3=0;index3<randomSurname.length();index3++) {
+			for (int i=0;i<randomSurname.length();i++) {
 				System.out.print("_ ");
 			}
 			// Open a loop that will go asking to the player a possible letter in each turn
-			int flag=0;
-			while (flag<3) {
-				// Check that the player doesn't enter a number
-				if (!sc.hasNextInt()) {
+			int cnt=0;
+			while (cnt<3) {
 					// Create a string object with the letter's value
 					String possibleLetter=sc.nextLine().toLowerCase();
-					String[] letterArray = possibleLetter.split(" ");
-					if(letterArray.length==1) {
-						// Check that the player has entered just a character
-						if (letterArray[0].length()==1) {
+					
+					ArrayList<Integer> positions = new ArrayList<Integer>();
+					
+					if(hangman.validInput(possibleLetter)) {
+						
+						if (hangman.letterMatch(possibleLetter))
+							
+							
+							ArrayList<Integer> positions = (ArrayList<Integer>)hangman.matchPositions(possibleLetter).clone();
+							
+							
+						/*
 							// Open a loop that will go checking if the letter the player entered is in the surname
-							for (int index=0;index<randomSurname.length();index++) {
-								if (randomSurname.charAt(index)==letterArray[0].charAt(0)) {
+							for (int i=0;i<randomSurname.length();i++) {
+								if (randomSurname.charAt(i)==possibleLetter.charAt(0)) {
 									// If it is, open another loop which will go checking if the player had already guessed that letter
 									boolean found = false;
-									int index2=0;
-									while (index2<guessed.length && guessed[index2]!=letterArray[0].charAt(0) && !found ){
-										if (!Character.isLetter(guessed[index2])) {
+									int j=0;
+									while (j<guessed.length && guessed[j]!=letterArray[0].charAt(0) && !found ){
+										if (!Character.isLetter(guessed[j])) {
 											// If he/she had not done so, save the letter in the array 'guessed'
-											guessed[guessedCounter] = randomSurname.charAt(index);
+											guessed[guessedCounter] = randomSurname.charAt(i);
 											// Increment once the variable 'guessedCounter' for a future possible letter
 											guessedCounter++;
 											// Define the variable 'found' as true so as to get out of the loop
@@ -69,28 +89,26 @@ public class mainInterface {
 									}
 								}
 							}
+							
+							*/
+							
+							
 							// Increment 'flag' so as to ask for another letter
-							flag++;
+							cnt++;
 						}
 						// If the player entered more than one characters, ask him/her to enter just one
 						else {
 							System.out.println("Don't cheat, please enter just a letter.");
 						}
 					}
-					else {
-						System.out.println("Don't cheat, please enter just a letter.");
-					}
-				}
-				// If the player entered a number, ask him to enter a letter
-				else {
-					System.out.println("That is not a letter, try it again.");
-					sc.nextLine();
+					
+				
 				}
 				// Print the surname with only the letters that the player guessed
-				for (int index4=0;index4<randomSurname.length();index4++) {
+				for (int i=0;i<randomSurname.length();i++) {
 					boolean found = false;
-					for (int index5=0;index5<guessed.length;index5++) {
-						if (guessed[index5]==randomSurname.charAt(index4)) {
+					for (int j=0;j<guessed.length;j++) {
+						if (guessed[j]==randomSurname.charAt(i)) {
 							System.out.print(randomSurname.charAt(index4)+ " ");
 							found = true;
 						}
